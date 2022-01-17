@@ -3,7 +3,7 @@ import noteContext from '../context/notes/noteContext';
 
 const Addnote = () => {
     const context = useContext(noteContext);
-    const {notes,addnote}= context;
+    const {addnote}= context;
 
     const [note, setnote] = useState({title:"",description:"",tag:"default"})
 
@@ -35,7 +35,7 @@ const Addnote = () => {
                         <input type="checkbox" className="form-check-input" id="exampleCheck1" />
                         <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
                     </div>
-                    <button type="submit" className="btn btn-primary" onClick={handleclick}>Submit</button>
+                    <button type="submit" className="btn btn-primary" onClick={handleclick}>Add Note</button>
                 </form>
             </div>
     )
