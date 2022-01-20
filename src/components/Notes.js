@@ -5,17 +5,16 @@ import Noteitem from './Noteitem';
 
 export default function Notes() {
     const context = useContext(noteContext);
-    const { notes, getnotes } = context;
+    const { notes, getnotes, editnote } = context;
     useEffect(() => {
         getnotes();
         // eslint-disable-next-line
     }, [])
-    const [note, setnote] = useState({etitle:"",edescription:"",etag:""})
+    const [note, setnote] = useState({id:"",etitle:"",edescription:"",etag:""})
 
     const handleclick =(e)=>{
-
-        //not to reload the page
-        e.preventDefault();
+        editnote(note.id,note.etitle,note.edescription,note.etag)
+        refclose.current.click();
 
     }
     const onChange=(e)=>{
@@ -24,10 +23,11 @@ export default function Notes() {
     }
     const updatenote = (cnote) => {
         ref.current.click();
-        setnote({etitle:cnote.title , edescription:cnote.description , etag:cnote.tag})
+        setnote({id:cnote._id,etitle:cnote.title , edescription:cnote.description , etag:cnote.tag})
 
     }
     const ref = useRef(null);
+    const refclose = useRef(null);
     return (
         <>
             <Addnote />
@@ -59,7 +59,7 @@ export default function Notes() {
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button ref={refclose} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="button" className="btn btn-primary" onClick={handleclick}>Update note</button>
                         </div>
                     </div>
