@@ -18,7 +18,7 @@ const NoteState = (props) => {
       },
     });
 
-    const json= await response.json();
+    const json = await response.json();
     console.log(json)
     setNotes(json)
 
@@ -35,7 +35,7 @@ const NoteState = (props) => {
         'Content-Type': 'application/json',
         'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFjOWVjY2Q3OWI1ZGYxZjVmOWE1ODBkIn0sImlhdCI6MTY0MDc5ODY1OH0.H-t3PDhMChpo9fRqsn-OFRpDDGKbp4FdGzdb3glMgrs'
       },
-      body: JSON.stringify({title,description,tag})
+      body: JSON.stringify({ title, description, tag })
     });
 
 
@@ -53,7 +53,19 @@ const NoteState = (props) => {
 
 
   // DELETE  a Note
-  const deletenote = (id) => {
+  const deletenote = async (id) => {
+    //API Call(syntax gathered from internet)
+    const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFjOWVjY2Q3OWI1ZGYxZjVmOWE1ODBkIn0sImlhdCI6MTY0MDc5ODY1OH0.H-t3PDhMChpo9fRqsn-OFRpDDGKbp4FdGzdb3glMgrs'
+      },
+    });
+    const json = response.json();
+    console.log(json);
+
+    //logic to delete note
     const newnotes = notes.filter((note) => { return note._id !== id });
     setNotes(newnotes);
 
@@ -68,7 +80,7 @@ const NoteState = (props) => {
         'Content-Type': 'application/json',
         'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFjOWVjY2Q3OWI1ZGYxZjVmOWE1ODBkIn0sImlhdCI6MTY0MDc5ODY1OH0.H-t3PDhMChpo9fRqsn-OFRpDDGKbp4FdGzdb3glMgrs'
       },
-      body: JSON.stringify({title,description,tag})
+      body: JSON.stringify({ title, description, tag })
     });
     const json = response.json();
 
@@ -87,7 +99,7 @@ const NoteState = (props) => {
   }
 
   return (
-    <NoteContext.Provider value={{ notes, addnote, editnote, deletenote,getnotes }}>
+    <NoteContext.Provider value={{ notes, addnote, editnote, deletenote, getnotes }}>
       {props.children}
     </NoteContext.Provider>
   )
