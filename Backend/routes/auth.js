@@ -4,7 +4,8 @@ const User = require('../models/User');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const fetchuser = require("../middleware/fetchuser")
+const fetchuser = require("../middleware/fetchuser");
+const { success } = require('concurrently/src/defaults');
 
 const JWT_SCERET = "santhu2002";
 
@@ -61,6 +62,7 @@ router.post('/login', [
   body('email', 'enter a valid email').isEmail(),
   body('password', 'password cannot be blank').exists(),
 ], async (req, res) => {
+  let success =false;
   //if there are any errors ,return bad request and the errors
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -71,11 +73,13 @@ router.post('/login', [
   try {
     let user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ errors: "please enter correct credentials" });
+      success=false;
+      return res.status(400).json({ success,errors: "please enter correct credentials" });
     }
     const passwordcompare = await bcrypt.compare(password, user.password)
     if(!passwordcompare){
-      return res.status(400).json({ errors: "please enter correct credentials" });
+      success=false;
+      return res.status(400).json({success, errors: "please enter correct credentials" });
     };
 
     const data = {
@@ -84,9 +88,10 @@ router.post('/login', [
       }
     }
     const authtoken = jwt.sign(data, JWT_SCERET);
+    success=true;
 
     //res.json(user);
-    res.json({ authtoken });
+    res.json({ success,authtoken });
 
   } catch (error) {
     console.error(error.message);
