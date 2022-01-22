@@ -1,10 +1,63 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const Signup = () => {
 
+    const [credentials, setcredentials] = useState({ name: "", email: "", password: "", cpassword: "" })
+
+    let history = useHistory();
+
+    const onChange = (e) => {
+        setcredentials({ ...credentials, [e.target.name]: e.target.value })
+    }
+
+    const handlesubmit = async (e) => {
+        e.preventDefault();
+        //API Call(syntax gathered from internet)
+        const response = await fetch("http://localhost:5000/api/auth/createuser", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: credentials.name, email: credentials.email, password: credentials.password })
+        });
+        const json = await response.json();
+        console.log(json)
+
+        if(json.success){
+            //Save the authtoken and redirect
+            localStorage.setItem('token',json.authtoken);
+            history.push("/");
+        }
+        else{
+            alert("Invalid Credentials")
+        }
+    }
+
     return (
-        <>
-        </>
+        <div className="container">
+            <form onSubmit={handlesubmit}>
+                <div className="mb-3">
+                    <label for="name" className="form-label">Name</label>
+                    <input type="text" className="form-control" onChange={onChange} name='name' id="name" />
+                </div>
+                <div className="mb-3">
+                    <label for="email" className="form-label">Email address</label>
+                    <input type="email" className="form-control" id="email" onChange={onChange} name='email' aria-describedby="emailHelp" />
+                    <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+                </div>
+                <div className="mb-3">
+                    <label for="password" className="form-label">Password</label>
+                    <input type="password" className="form-control" onChange={onChange} name='password' id="password" minLength={5} required />
+                </div>
+                <div className="mb-3">
+                    <label for="cpassword" className="form-label">Confirm Password</label>
+                    <input type="password" className="form-control" onChange={onChange} name='cpassword' id="cpassword" />
+                </div>
+                <button type="submit" className="btn btn-primary">Sign up</button>
+            </form>
+        </div>
+
     );
 };
 

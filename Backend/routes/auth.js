@@ -9,22 +9,23 @@ const { success } = require('concurrently/src/defaults');
 
 const JWT_SCERET = "santhu2002";
 
-// Route 2:Create a User using :POST "/api/auth/createuser" . Doesn't require authentication, No login required 
+// Route 1:Create a User using :POST "/api/auth/createuser" . Doesn't require authentication, No login required 
 router.post('/createuser', [
   body('email', 'enter a valid email').isEmail(),
   body('password', 'enter password atleast 5 characters').isLength({ min: 5 }),
   body('name', 'enter a valid name').isLength({ min: 3 }),
 ], async (req, res) => {
+  let success =false;
   //if there are any errors ,return bad request and the errors
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({success, errors: errors.array() });
   }
   //check Wheather the user with this email exists already
   try {
     let user = await User.findOne({ email: req.body.email });
     if (user) {
-      return res.status(400).json({ error: "Sorry a user with this email already exist" })
+      return res.status(400).json({success, error: "Sorry a user with this email already exist" })
     }
 
     //creating a password by adding salt(using bcryptjs)
@@ -44,9 +45,10 @@ router.post('/createuser', [
       }
     }
     const authtoken = jwt.sign(data, JWT_SCERET);
+    success=true;
 
     //res.json(user);
-    res.json({ authtoken });
+    res.json({ success,authtoken });
 
     //catch errors
   } catch (error) {
