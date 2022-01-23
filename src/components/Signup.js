@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-const Signup = () => {
+const Signup = (props) => {
 
     const [credentials, setcredentials] = useState({ name: "", email: "", password: "", cpassword: "" })
 
@@ -28,9 +28,10 @@ const Signup = () => {
             //Save the authtoken and redirect
             localStorage.setItem('token',json.authtoken);
             history.push("/");
+            props.showalert("Account created Successfully ","success")
         }
         else{
-            alert("Invalid Credentials")
+            props.showalert("Invalid Credentials","danger")
         }
     }
 
@@ -38,20 +39,20 @@ const Signup = () => {
         <div className="container">
             <form onSubmit={handlesubmit}>
                 <div className="mb-3">
-                    <label for="name" className="form-label">Name</label>
+                    <label htmlFor="name" className="form-label">Name</label>
                     <input type="text" className="form-control" onChange={onChange} name='name' id="name" />
                 </div>
                 <div className="mb-3">
-                    <label for="email" className="form-label">Email address</label>
+                    <label htmlFor="email" className="form-label">Email address</label>
                     <input type="email" className="form-control" id="email" onChange={onChange} name='email' aria-describedby="emailHelp" />
                     <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                 </div>
                 <div className="mb-3">
-                    <label for="password" className="form-label">Password</label>
+                    <label htmlFor="password" className="form-label">Password</label>
                     <input type="password" className="form-control" onChange={onChange} name='password' id="password" minLength={5} required />
                 </div>
                 <div className="mb-3">
-                    <label for="cpassword" className="form-label">Confirm Password</label>
+                    <label htmlFor="cpassword" className="form-label">Confirm Password</label>
                     <input type="password" className="form-control" onChange={onChange} name='cpassword' id="cpassword" />
                 </div>
                 <button type="submit" className="btn btn-primary">Sign up</button>

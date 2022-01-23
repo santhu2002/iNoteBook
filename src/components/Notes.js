@@ -3,7 +3,7 @@ import noteContext from '../context/notes/noteContext';
 import Addnote from './Addnote';
 import Noteitem from './Noteitem';
 
-export default function Notes() {
+export default function Notes(props) {
     const context = useContext(noteContext);
     const { notes, getnotes, editnote } = context;
     useEffect(() => {
@@ -15,6 +15,7 @@ export default function Notes() {
     const handleclick =(e)=>{
         editnote(note.id,note.etitle,note.edescription,note.etag)
         refclose.current.click();
+        props.showalert("Updated Note Successfully","success")
 
     }
     const onChange=(e)=>{
@@ -30,7 +31,7 @@ export default function Notes() {
     const refclose = useRef(null);
     return (
         <>
-            <Addnote />
+            <Addnote showalert={props.showalert} />
             <button type="button" ref={ref} className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 lanuch modal
             </button>
@@ -71,7 +72,7 @@ export default function Notes() {
                     {notes.length===0 && 'No Notes to display'}
                 </div>
                 {notes.map((note) => {
-                    return <Noteitem key={note._id} updatenote={updatenote} note={note} />
+                    return <Noteitem key={note._id} updatenote={updatenote} note={note} showalert={props.showalert} />
                 })}
             </div>
         </>
