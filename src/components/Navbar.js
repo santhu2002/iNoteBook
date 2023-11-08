@@ -27,11 +27,17 @@ export const Navbar = () => {
                             <Link className={`nav-link ${location.pathname === "/about" ? "active" : ""}`} aria-current="page" to="/about">About</Link>
                         </li>
                     </ul>
+                    <div>
+                        {!localStorage.getItem('token')?<form className="d-flex">
+                        <Link role="button" to="/login" className="btn btn-primary mx-1">Login</Link>
+                        <Link role="button" to="/signup"className="btn btn-primary mx-1">Sign up</Link>
+                        </form>:<button onClick={handlelogout} className="btn btn-primary mx-1">Logout</button> }
+                    </div>
                 </div>
-                {!localStorage.getItem('token')?<form className="d-flex">
+                {/* {!localStorage.getItem('token')?<form className="d-flex">
                     <Link role="button" to="/login" className="btn btn-primary mx-1">Login</Link>
                     <Link role="button" to="/signup"className="btn btn-primary mx-1">Sign up</Link>
-                </form>:<button onClick={handlelogout} className="btn btn-primary mx-1">Logout</button> }
+                </form>:<button onClick={handlelogout} className="btn btn-primary mx-1">Logout</button> } */}
             </div>
         </nav>
     )
